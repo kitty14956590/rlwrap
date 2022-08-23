@@ -126,10 +126,10 @@ init_readline(char *UNUSED(prompt))
 
   bracketed_paste_enabled = term_enable_bracketed_paste != NULL && strings_are_equal(rl_variable_value("enable-bracketed-paste"),"on");
 
-  //if (bracketed_paste_enabled) {
-  //  DPRINTF0(DEBUG_READLINE, "bracketed-paste is enabled");
-  //  my_putstr(term_enable_bracketed_paste);
-  //}
+  if (bracketed_paste_enabled) {
+    DPRINTF0(DEBUG_READLINE, "bracketed-paste is enabled");
+    my_putstr(term_enable_bracketed_paste);
+  }
 }
 
 
@@ -241,8 +241,8 @@ line_handler(char *line)
        O.K, we know for sure that cursor is at start of line. When clients output arrives, it will be printed at
        just the right place - but first we 'll erase the user input (as it may be about to be changed by the filter) */
 
-    //if (bracketed_paste_enabled)   /* we're at start of line and the prompt has just been erased */
-    //  my_putstr(saved_rl_state.cooked_prompt);
+    if (bracketed_paste_enabled)   /* we're at start of line and the prompt has just been erased */
+      my_putstr(saved_rl_state.cooked_prompt);
       
     rl_delete_text(0, rl_end);  /* clear line  (after prompt) */
     rl_point = 0;
@@ -306,8 +306,8 @@ line_handler(char *line)
 
     /* readline only outputs term_enable_bracketed_paste when we call rl_prep_terminal(). That's too   */
     /* late for us, as we only call rl_prep_terminal *after* we have received user input               */
-    //if (bracketed_paste_enabled)
-    //  my_putstr(term_enable_bracketed_paste);
+    if (bracketed_paste_enabled)
+      my_putstr(term_enable_bracketed_paste);
   }
 }
 
